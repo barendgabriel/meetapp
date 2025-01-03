@@ -1,4 +1,7 @@
 Meet-app Project
+
+Here is the deployment link: https://vite-react-blue-nine-74.vercel.app/
+
 Welcome to the Meet App! This is a progressive web app that leverages serverless architecture and offline functionality in order for its users to search for events by city at any time-even offline. Using Serverless Architecture and PWA technologies means I'm building an application that is fast, reliably scalable, and available on any device.
 
 Key Features
