@@ -14,7 +14,7 @@ test('renders event title, date, and location', () => {
 
   // Check if event title, date, and location appear on the screen
   expect(screen.getByText(mockEvent.summary)).toBeInTheDocument(); // Event title
-  expect(screen.getByText('2025-01-10')).toBeInTheDocument(); // Event date
+  expect(screen.getByText('10/01/2025')).toBeInTheDocument(); // Updated event date format
   expect(screen.getByText(mockEvent.location)).toBeInTheDocument(); // Event location
 });
 
