@@ -8,7 +8,8 @@ const Event = ({ event }) => {
   return (
     <div className="event">
       <h2>{event.summary}</h2>
-      <p>{event.startTime}</p>
+      <p>{new Date(event.created).toLocaleDateString()}</p>{' '}
+      {/* Use event.created for the date */}
       <p>{event.location}</p>
       <button onClick={toggleDetails}>
         {showDetails ? 'Hide Details' : 'Show Details'}
