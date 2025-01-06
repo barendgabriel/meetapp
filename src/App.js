@@ -14,17 +14,13 @@ function App() {
     greeting = 'Good Evening!';
   }
 
-  // State for storing the authorization URL
-  const [authUrl, setAuthUrl] = useState('');
-
   const handleAuthorizeClick = async () => {
     try {
       // Fetch the authorization URL from the backend
       const response = await fetch('https://your-backend-url.com/get-auth-url');
       const data = await response.json();
-      setAuthUrl(data.authUrl);
-      // Redirect user to the Google OAuth URL
-      window.location.href = authUrl;
+      // Redirect user to the Google OAuth URL directly using fetched authUrl
+      window.location.href = data.authUrl;
     } catch (error) {
       console.error('Error getting auth URL:', error);
     }
