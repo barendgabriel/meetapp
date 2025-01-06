@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import Event from './Event'; // Import Event component
-import { fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/react';
 
 const mockEvent = {
   summary: 'Tech Meetup',
@@ -8,6 +8,7 @@ const mockEvent = {
   location: 'Berlin',
   details: 'Join us for a tech meetup in Berlin!',
 };
+
 test('renders event title, date, and location', () => {
   render(<Event event={mockEvent} />); // Show the event
 
@@ -29,19 +30,18 @@ test('toggles event details visibility on button click', async () => {
   fireEvent.click(showDetailsButton);
 
   // Wait for the details to appear
-  await waitFor(() => screen.getByText(mockEvent.details));
+  const eventDetails = await screen.findByText(mockEvent.details);
 
   // Check that event details are visible now
-  expect(screen.getByText(mockEvent.details)).toBeInTheDocument();
+  expect(eventDetails).toBeInTheDocument();
 
   // Click the button again to hide event details
   fireEvent.click(screen.getByText('Hide Details'));
 
-  // Wait for the details to disappear
-  await waitFor(() =>
-    expect(screen.queryByText(mockEvent.details)).not.toBeInTheDocument()
-  );
+  // Ensure the event details are no longer visible
+  expect(screen.queryByText(mockEvent.details)).not.toBeInTheDocument();
 });
+
 test('button text changes based on event details visibility', () => {
   render(<Event event={mockEvent} />); // Show the event
 
