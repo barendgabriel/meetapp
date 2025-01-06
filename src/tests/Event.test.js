@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Event from './Event'; // Import Event component
+import Event from './Event.js'; // Import Event component
 import { fireEvent } from '@testing-library/react';
 
 const mockEvent = {
