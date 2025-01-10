@@ -1,36 +1,50 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { getEvents } from '../api';
 import App from '../App';
+import React from 'react';
 
-// Mock fetch to simulate the authorization URL fetch
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    json: () => Promise.resolve({ authUrl: 'https://google.com/oauth' }),
-  })
-);
-
-test('displays greeting based on time of day', () => {
-  render(<App />);
-
-  const greeting = screen.getByText(/Good (Morning|Afternoon|Evening)!/); // Check for greeting message
-
-  expect(greeting).toBeInTheDocument(); // Verify that the greeting message is in the document
+describe('<App /> component', () => {
+  let AppDOM;
+  beforeEach(() => {
+    AppDOM = render(<App />).container.firstChild;
+  });
+  test('renders list of events', () => {
+    expect(AppDOM.querySelector('#event-list')).toBeInTheDocument();
+  });
+  test('render CitySearch', () => {
+    expect(AppDOM.querySelector('#city-search')).toBeInTheDocument();
+  });
+  test('render NumberOfEvents', () => {
+    expect(AppDOM.querySelector('#numberOfEvents')).toBeInTheDocument();
+  });
 });
 
-test('renders authorize button and handles click', async () => {
-  render(<App />);
+describe('<App /> integration', () => {
+  test('renders a list of events matching the city selected by the user', async () => {
+    const user = userEvent.setup();
+    const AppComponent = render(<App />);
+    const AppDOM = AppComponent.container.firstChild;
 
-  const button = screen.getByText('Authorize with Google'); // Find the button
+    const CitySearchDOM = AppDOM.querySelector('#city-search');
+    const CitySearchInput = within(CitySearchDOM).queryByRole('textbox');
 
-  expect(button).toBeInTheDocument(); // Ensure the button is in the document
+    await user.type(CitySearchInput, 'Berlin');
+    const berlinSuggestionItem =
+      within(CitySearchDOM).queryByText('Berlin, Germany');
+    await user.click(berlinSuggestionItem);
 
-  // Simulate clicking the button
-  fireEvent.click(button);
+    const EventListDOM = AppDOM.querySelector('#event-list');
+    const allRenderedEventItems =
+      within(EventListDOM).queryAllByRole('listitem');
 
-  // Wait for the redirect to happen (simulated by setting authUrl)
-  await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(1)); // Ensure fetch is called once
-  await waitFor(() =>
-    expect(global.fetch).toHaveBeenCalledWith(
-      'https://your-backend-url.com/get-auth-url'
-    )
-  ); // Check if fetch URL is correct
+    const allEvents = await getEvents();
+    const berlinEvents = allEvents.filter(
+      (event) => event.location === 'Berlin, Germany'
+    );
+    expect(allRenderedEventItems.length).toBe(berlinEvents.length);
+    allRenderedEventItems.forEach((event) => {
+      expect(event.textContent).toContain('Berlin, Germany');
+    });
+  });
 });
