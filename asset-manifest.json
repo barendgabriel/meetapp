@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/barendgabriel/meetapp/static/css/main.1a7488ce.css",
+    "main.js": "/barendgabriel/meetapp/static/js/main.a954cec3.js",
+    "static/js/453.4a9980c6.chunk.js": "/barendgabriel/meetapp/static/js/453.4a9980c6.chunk.js",
+    "index.html": "/barendgabriel/meetapp/index.html",
+    "main.1a7488ce.css.map": "/barendgabriel/meetapp/static/css/main.1a7488ce.css.map",
+    "main.a954cec3.js.map": "/barendgabriel/meetapp/static/js/main.a954cec3.js.map",
+    "453.4a9980c6.chunk.js.map": "/barendgabriel/meetapp/static/js/453.4a9980c6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1a7488ce.css",
+    "static/js/main.a954cec3.js"
+  ]
+}
