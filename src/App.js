@@ -1,42 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import CitySearch from './components/CitySearch';
+import NumberOfEvents from './components/NumberOfEvents';
+import EventList from './components/EventList';
+import { extractLocations, getEvents } from './api';
 import './App.css';
 
-function App() {
-  // Optional: You can add a dynamic greeting with the current time
-  const hour = new Date().getHours();
-  let greeting;
+const App = () => {
+  const [events, setEvents] = useState([]);
+  const [allLocations, setAllLocations] = useState([]);
+  const [currentNOE, setCurrentNOE] = useState(32);
+  const [currentCity, setCurrentCity] = useState('See all cities');
 
-  if (hour < 12) {
-    greeting = 'Good Morning!';
-  } else if (hour < 18) {
-    greeting = 'Good Afternoon!';
-  } else {
-    greeting = 'Good Evening!';
-  }
-
-  const handleAuthorizeClick = async () => {
+  const fetchData = async () => {
     try {
-      // Fetch the authorization URL from the backend
-      const response = await fetch('https://your-backend-url.com/get-auth-url');
-      const data = await response.json();
-      // Redirect user to the Google OAuth URL directly using fetched authUrl
-      window.location.href = data.authUrl;
+      const allEvents = await getEvents();
+      const filteredEvents =
+        currentCity === 'See all cities'
+          ? allEvents
+          : allEvents.filter((event) => event.location === currentCity);
+      setEvents(filteredEvents.slice(0, currentNOE));
+      setAllLocations(extractLocations(allEvents));
     } catch (error) {
-      console.error('Error getting auth URL:', error);
+      console.error('Error fetching events. Please try again later.');
     }
   };
 
+  useEffect(() => {
+    fetchData();
+  }, [currentCity, currentNOE]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        {/* Display the greeting message */}
-        <h1>{greeting}</h1>
-        <p>Welcome to Meet App!</p>
-        {/* Button to trigger Google OAuth */}
-        <button onClick={handleAuthorizeClick}>Authorize with Google</button>
-      </header>
+      <h1>Meet App</h1>
+      <CitySearch allLocations={allLocations} setCurrentCity={setCurrentCity} />
+      <NumberOfEvents setCurrentNOE={setCurrentNOE} />
+      <EventList events={events} />
     </div>
   );
-}
+};
 
 export default App;

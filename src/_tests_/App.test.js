@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import App from './App';
+import App from '../App';
 
 // Mock fetch to simulate the authorization URL fetch
 global.fetch = jest.fn(() =>
