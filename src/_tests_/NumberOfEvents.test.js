@@ -5,9 +5,15 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 describe('<NumberOfEvents /> component', () => {
   let NumberOfEventsComponent;
+  const setErrorAlert = jest.fn();
+
   beforeEach(() => {
     NumberOfEventsComponent = render(
-      <NumberOfEvents setNumberOfEvents={() => {}} setCurrentNOE={() => {}} />
+      <NumberOfEvents
+        setNumberOfEvents={() => {}}
+        setCurrentNOE={() => {}}
+        setErrorAlert={setErrorAlert}
+      />
     );
   });
 
